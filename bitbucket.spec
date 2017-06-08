@@ -15,6 +15,7 @@ Distribution: RHEL6
 Vendor: Red Hat
 Packager: Tom Duckering <tom.duckering@gmail.com>
 Requires: java => 1.8.0
+Requires(pre): shadow-utils
 
 %description
 TODO: Bitbucket description
@@ -37,7 +38,17 @@ cp $RPM_BUILD_DIR/%{name}_rpm_extras-master/bitbucket.init $RPM_BUILD_ROOT/etc/i
 cp $RPM_BUILD_DIR/%{name}_rpm_extras-master/bitbucket.sysconfig $RPM_BUILD_ROOT/etc/sysconfig/bitbucket
 
 %files
-%defattr(-, root, root,-)
+%defattr(-, bitbucket, bitbucket,-)
 /opt/%{name}
 /etc/sysconfig/%{name}
 %attr(755, root, root) /etc/init.d/bitbucket
+
+%pre
+USERNAME="bitbucket"
+GROUPNAME="bitbucket"
+HOMEDIR="/opt/bitbucket"
+
+getent group ${GROUPNAME} >/dev/null || groupadd -f -r ${GROUPNAME}
+getent passwd ${USERNAME} >/dev/null || useradd -r -g ${GROUPNAME} -d ${HOMEDIR} -s /sbin/nologin -c "The service account for bitbucket" ${USERNAME}
+fi
+exit 0
