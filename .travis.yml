@@ -1,0 +1,22 @@
+sudo: required
+env:
+  matrix:
+  - OS_TYPE=centos OS_VERSION=7
+addons:
+  artifacts: true
+services:
+  - docker
+before_install:
+  - sudo apt-get update
+  - echo 'DOCKER_OPTS="-H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock -s devicemapper"' | sudo tee /etc/default/docker > /dev/null
+  - sudo service docker restart
+  - sleep 5
+script:
+  - ./build.sh ${OS_VERSION}
+deploy:
+  provider: packagecloud
+  repository: scratch
+  username: tomduckering
+  dist: el/7
+  token:
+    secure: d0A43iEv+11NDQ5mYhaiO0C4ZlwCSfAn3/LK3Ss2AjAqdDJtdCGT/npNPxGvJ17EPIap1tGULd4XLpAOnkktqZJG+HTWsq9fE7+HFdCTrEPxRU1O8vQ1TqUfPDtviKoPn3M+Sr/Q7ZTfIm/Qd6vVJS0iaA5U0q6j/3nLz/rccTAqMf0ojhVwy26BSJLsfS9+hrf/cjeT4pKNnGg+75NnulK6zH7+cKkRfLVHGocq4qptkaQ/wdjTmRUHPnPbHsxlXGPJ12po+FDSeLb5vd9wz/TSmhCWeEhPJXZyp7hYh6mLCCn+VVfL79te5DHNu765GNaujcxPUucJ+eQuGgdxM/B598u3Z9JAkWuEZHLG4INuBDdFYEc9gE/Jf+hUA9UbvCZN6JL565ADmDuuATrPj6oJYBtx+ShtfjQa88A9oCX/he0t0M+Tsl7FI0cQ7BOanAo7lHQf8FLyGOdN/dP3Q9/ajv2CA7sXGxywxeGScZBENmFUPWR1/53ei+aqgXKJmGRcvx6kIs0ucst7B97Ooj94AdYfwOqRpbPnp3Nej6Fq0efwN/Yh/GTrZLL4loO+XlM0o1jB0WHn3IwL/EjwZeBBN/3VNAv99Gud+FPP5iI8IZU48msykuJ4F6WFEXHkkdgVvux/CSGMdm+xaIDIGYxMsM7nVELtqrYcq7RYxFo=

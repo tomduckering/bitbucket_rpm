@@ -1,2 +1,13 @@
-docker build --tag rpm_builder .
-docker run --cap-add=SYS_ADMIN --volume $PWD/cache:/var/cache/mock --volume $PWD:/spec_src rpm_builder $1
+#!/bin/sh -xe
+
+if test "${TRAVIS}" = "true"
+then
+	BUILD_NUMBER=${TRAVIS_BUILD_NUMBER}
+else
+	BUILD_NUMBER="localbuild"
+fi
+
+export BUILD_NUMBER
+
+ # Run build in Container
+docker run --env BUILD_NUMBER --volume `pwd`:/spec_src tomduckering/el7_chef_rpm_builder bitbucket.spec
