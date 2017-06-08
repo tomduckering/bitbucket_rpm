@@ -9,5 +9,4 @@ fi
 
 export BUILD_NUMBER
 
- # Run build in Container
 docker run --env BUILD_NUMBER --volume `pwd`:/spec_src tomduckering/el7_chef_rpm_builder bitbucket.spec
