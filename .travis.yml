@@ -1,7 +1,4 @@
 sudo: required
-env:
-  matrix:
-  - OS_TYPE=centos OS_VERSION=7
 addons:
   artifacts: true
 services:
@@ -12,7 +9,7 @@ before_install:
   - sudo service docker restart
   - sleep 5
 script:
-  - ./build.sh ${OS_VERSION}
+  - ./build.sh
 deploy:
   provider: packagecloud
   repository: scratch
